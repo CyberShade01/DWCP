@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Webhook Control Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2e2e2e;
+            color: #cfcfcf;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #3b3b3b;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #444;
+            color: #cfcfcf;
+        }
+        button {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Discord Webhook Control Panel</h1>
+        <form id="webhookForm">
+            <div class="form-group">
+                <label for="webhookUrl">Webhook URL</label>
+                <select id="webhookUrl">
+                    <option value="https://discord.com/api/webhooks/example1">Webhook 1</option>
+                    <option value="https://discord.com/api/webhooks/example2">Webhook 2</option>
+                    <option value="https://discord.com/api/webhooks/example3">Webhook 3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="messageContent">Message</label>
+                <textarea id="messageContent" rows="4" placeholder="Enter your message here..."></textarea>
+            </div>
+            <button type="button" id="sendButton">Send Message</button>
+        </form>
+        <div id="responseMessage" style="margin-top: 20px;"></div>
+    </div>
+
+    <script>
+        document.getElementById('sendButton').addEventListener('click', () => {
+            const webhookUrl = document.getElementById('webhookUrl').value;
+            const messageContent = document.getElementById('messageContent').value;
+
+            if (!messageContent) {
+                alert('Please enter a message.');
+                return;
+            }
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: messageContent
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('responseMessage').innerText = 'Message sent successfully!';
+                } else {
+                    document.getElementById('responseMessage').innerText = 'Failed to send message.';
+                }
+            })
+            .catch(error => {
+                document.getElementById('responseMessage').innerText = 'An error occurred.';
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
